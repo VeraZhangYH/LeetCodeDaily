@@ -1,0 +1,94 @@
+#LC58 Length of Last Word: class Solution:
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        s = s[::-1]
+        s = s.split()
+        return len(s[0])
+
+
+#LC209 Minimum Size Subarray Sum: class Solution: https://leetcode.com/problems/minimum-size-subarray-sum/description/
+# sliding window implementation method:
+'''
+int left = 0, right = 0;
+
+while (right < nums.size()) {
+    // 增大窗口
+    window.addLast(nums[right]);
+    right++;
+    
+    while (window needs shrink) {
+        // 缩小窗口
+        window.removeFirst(nums[left]);
+        left++;
+    }
+}
+The time cplixity of this algorithm is O(n).
+指针 left, right 不会回退（它们的值只增不减），
+所以字符串/数组中的每个元素都只会进入窗口一次，然后被移出窗口一次，
+不会说有某些元素多次进入和离开窗口，所以算法的时间复杂度就和字符串/数组的长度成正比。
+'''
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        # Understand: return the length of the subarray whose sum >= target
+        # if no, return 0
+        # Match: sliding window
+        # Plan: : left, right = 0, 0
+        # iterate right through nums
+        # if sum is greater, store the current length and move left pointer to right by 1
+        if not nums:
+            return 0
+        left, right = 0, 0
+        # to use the min method here, res should initiate to infinite
+        res = float('inf')
+        sum = 0
+        # sliding window
+        for right in range(len(nums)):
+            sum += nums[right]
+            while sum >= target:
+                res = min(res, right - left + 1)
+                sum -= nums[left]
+                left += 1
+        return res if res != float('inf') else 0
+
+#LC59 Spiral Matrix II: https://leetcode.com/problems/spiral-matrix-ii/
+'''
+Given a positive integer n, generate an n x n matrix filled with elements from 1 to n2 in spiral order.
+'''
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        # create the matrix
+        nums = [[0] * n for _ in range(n)]
+        startX, startY = 0, 0
+        offset = 1
+        loop = n // 2
+        # keep track of the count
+        count = 1
+        mid = n // 2
+
+        while loop > 0:
+            # top row
+            for col in range(startY, n - offset):
+                nums[startX][col] = count
+                count += 1
+            # right column
+            for row in range(startX, n - offset):
+                nums[row][n - offset] = count
+                count += 1
+            # bottom row
+            for col in range(n - offset, startY, -1):
+                nums[n - offset][col] = count
+                count += 1
+            # left column
+            for row in range(n - offset, startX, -1):
+                nums[row][startY] = count
+                count += 1
+            
+            startX += 1
+            startY += 1
+            offset += 1
+            loop -= 1
+
+        if n % 2 == 1:
+            nums[mid][mid] = count
+
+        return nums
