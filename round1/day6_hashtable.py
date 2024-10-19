@@ -145,4 +145,20 @@ class Solution:
             seen.add(n)
             n = get_next(n)
         return n == 1
-    
+# LC1 Two Sum: https://leetcode.com/problems/two-sum/
+'''
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+You can return the answer in any order.
+'''
+# method 1: use the hashset to store the difference between the target and the current element
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        seen = {}
+        for i, num in enumerate(nums):
+            if target - num in seen:
+                return [seen[target - num], i]
+            seen[num] = i
+        return []
+# enumerate() function returns an enumerate object. It contains the index and value of all the items in the list as pairs.
+# seen[num] = i: store the index of the current element in the hashset, because we want to return the index
